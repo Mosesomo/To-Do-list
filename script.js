@@ -31,6 +31,7 @@ addTask.addEventListener('click', () =>{
         taskContainer.appendChild(task);
     }
     inputTask.value = "";
+    saveData();
 
     checkBtn.addEventListener('click', ()=>{
         checkBtn.parentElement.style.textDecoration="line-through";
@@ -40,7 +41,28 @@ addTask.addEventListener('click', () =>{
         });
 });
 
-const header = document.querySelector('header');
-window.addEventListener("scroll", ()=>{
-    header.classList.toggle("sticky", this.window.scrollY>0);
-});
+saveData = () =>{
+    localStorage.setItem("data", taskContainer.innerHTML);
+}
+
+loadData=()=> {
+    taskContainer.innerHTML = localStorage.getItem("data");
+
+    const checkButtons = document.querySelectorAll('.checkTask');
+    const deleteButtons = document.querySelectorAll('.deleteTask');
+
+    checkButtons.forEach(checkBtn => {
+        checkBtn.addEventListener('click', () => {
+            checkBtn.parentElement.style.textDecoration = "line-through";
+        });
+    });
+
+    deleteButtons.forEach(deleteBtn => {
+        deleteBtn.addEventListener('click', () => {
+            deleteBtn.parentElement.remove();
+            saveData(); // Update local storage after removing a task
+        });
+    });
+}
+
+loadData();
